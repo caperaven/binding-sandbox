@@ -1,0 +1,9 @@
+{
+    "name": "",
+    "version": "0.0.8",
+    "description": "Application starter template",
+    "scripts": {
+        "test": "deno test",
+        "bundle": "deno run --allow-read --allow-write --allow-env --allow-run  --allow-net ./build/package.js"
+    }
+}
