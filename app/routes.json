@@ -11,6 +11,11 @@
       "hasStyle": true
     },
     {
+      "title": "Simulation",
+      "hash": "#simulation",
+      "view": "simulation"
+    },
+    {
       "title": "Form",
       "hash": "#form",
       "view": "form"

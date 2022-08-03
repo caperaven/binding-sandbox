@@ -16,7 +16,7 @@ The purpose here for rapid application development where the moving parts are al
 ## Views
 The application comes by default with three views already configured.
 
-1. Welcome - default view with view model
+1. Simulation - default view with view model
 2. About - html only view
 3. 404 - html only view
 

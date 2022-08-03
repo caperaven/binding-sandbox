@@ -3,18 +3,40 @@
         display: block;
         margin: 0.5rem;
     }
+
+    input[type="range"] {
+        display: block;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .blue {
+        color: blue;
+    }
+
+    .back {
+        background: silver;
+    }
 </style>
 
 <h2>${title}</h2>
 
 <label>
     <div>First Name</div>
-    <input value.bind="data.firstName">
+    <input value.bind="firstName">
 </label>
 
 <label>
     <div>Last Name</div>
-    <input value.bind="data.lastName">
+    <input value.bind="lastName">
 </label>
 
-<div class="booking">Booking for ${data.firstName} ${data.lastName}</div>
+<label>
+    <div>Age</div>
+    <input value.bind="age" type="number">
+    <input type="range" value.bind="age" min="10" max="30">
+</label>
+
+<div class="booking" classlist.if="age < 20 ? 'red' : 'blue'" >Booking for ${firstName} ${lastName}</div>
