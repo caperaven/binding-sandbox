@@ -1,9 +1,4 @@
 export function drawTerrain(data, canvas) {
-    canvas.width = data.width;
-    canvas.style.width = `${data.width}px`;
-    canvas.height = data.height;
-    canvas.style.height = `${data.height}px`;
-
     const ctx = canvas.getContext("2d");
     const imageData = ctx.createImageData(data.width, data.height);
 
@@ -29,6 +24,7 @@ export function drawTerrain(data, canvas) {
 
 function normalize(value, min, max) {
     // https://www.statology.org/normalize-data-between-0-and-1/
-    //    return (value - min) / (max - min)
+    // (value - min) / (max - min)
+    // we need to invert the normalization so we change the formula a bit.
     return (max - value) / (max - min);
 }

@@ -11,11 +11,15 @@
 
     canvas {
         border: solid 1px silver;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 </style>
 
 <div class="container">
-    <canvas></canvas>
+    <canvas id="terrain"></canvas>
+    <canvas id="flow"></canvas>
 </div>
 <div>
     <button click.call="loadData">Load Data</button>
