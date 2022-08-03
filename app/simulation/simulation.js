@@ -1,4 +1,5 @@
 import {textToData} from "./text-to-data.js";
+import {drawTerrain} from "./draw-terrain.js";
 
 export default class Simulation extends crsbinding.classes.ViewBase {
     async connectedCallback() {
@@ -8,5 +9,9 @@ export default class Simulation extends crsbinding.classes.ViewBase {
     async loadData() {
         const text = await fetch(import.meta.url.replace(".js", ".txt")).then(result => result.text());
         this.data = textToData(text);
+
+        const canvas = this._element.querySelector("canvas");
+        drawTerrain(this.data, canvas);
     }
+
 }
