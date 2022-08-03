@@ -50,9 +50,37 @@ export class FlowManager {
     }
 
     async mouseUp(event) {
-        this.rect = null;
-
         this.flow.removeEventListener("mousemove", this._mouseMoveHandler);
         this.flow.removeEventListener("mouseup", this._mouseUpHandler);
+
+        const terrainData = this.terrain.getContext("2d").getImageData(0, 0, this.terrain.width, this.terrain.height);
+        const flowData = this.flow.getContext("2d").getImageData(0, 0, this.flow.width, this.flow.height);
+
+        const simulation = new Simulation(terrainData, flowData, this.rect, () => {
+            console.log("done");
+            simulation.dispose();
+        })
+
+        simulation.done();
+    }
+}
+
+class Simulation {
+    constructor(terrainData, flowData, rect, callback) {
+        this.terrainData = terrainData;
+        this.flowData = flowData;
+        this.rect = rect;
+        this.callback = callback;
+    }
+
+    dispose() {
+        this.terrainData = null;
+        this.flowData = null;
+        this.rect = null;
+        this.callback = null;
+    }
+
+    done() {
+        this.callback();
     }
 }
