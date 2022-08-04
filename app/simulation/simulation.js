@@ -18,7 +18,7 @@ export default class Simulation extends crsbinding.classes.ViewBase {
 
         setDimensions(this.data, [terrain, flow]);
         drawTerrain(this.data, terrain);
-        this.flowManager = new FlowManager(terrain, flow);
+        this.flowManager = new FlowManager(this.data, flow);
     }
 
     async disconnectedCallback() {

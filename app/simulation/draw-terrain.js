@@ -23,8 +23,5 @@ export function drawTerrain(data, canvas) {
 }
 
 function normalize(value, min, max) {
-    // https://www.statology.org/normalize-data-between-0-and-1/
-    // (value - min) / (max - min)
-    // we need to invert the normalization so we change the formula a bit.
-    return (max - value) / (max - min);
+    return (value - min) / (max - min);
 }
