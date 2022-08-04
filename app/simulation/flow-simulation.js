@@ -205,9 +205,9 @@ class Simulation {
     }
 
     setDataAt(canvasData, index) {
-        canvasData.data[index + 0] = 0;
-        canvasData.data[index + 1] = 128;
-        canvasData.data[index + 2] = 255;
+        canvasData.data[index + 0] = 255;
+        canvasData.data[index + 1] = 33;
+        canvasData.data[index + 2] = 151;
         canvasData.data[index + 3] = 255;
     }
 }
