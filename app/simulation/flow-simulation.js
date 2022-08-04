@@ -55,8 +55,10 @@ export class FlowManager {
 
         const flowCtx = this.flow.getContext("2d");
 
+        this.flow.removeEventListener("mousedown", this._mouseDownHandler);
         const simulation = new Simulation(this.data, flowCtx, this.rect, () => {
-            console.log("done");
+            alert("done");
+            this.flow.addEventListener("mousedown", this._mouseDownHandler);
             simulation.dispose();
         })
     }
@@ -70,7 +72,7 @@ class Simulation {
         this.callback = callback;
         const points = this.createPointData();
 
-        crsbinding.idleTaskManager.add(() => this.processPoints(points)).catch(error => console.error(error));
+        this.processPoints(points).catch(error => console.error(error));
     }
 
     dispose() {
@@ -86,12 +88,12 @@ class Simulation {
 
     createPointData() {
         const points = [];
-        const x = this.rect.x;
-        const y = this.rect.y;
+        const rColumn = this.rect.x;
+        const rRow = this.rect.y;
 
         for (let row = 0; row < this.rect.height; row ++) {
             for (let column = 0; column < this.rect.width; column ++) {
-                points.push( {x: x + column, y: y + row} )
+                points.push({ row: rRow + row, column: rColumn + column })
             }
         }
 
@@ -99,49 +101,55 @@ class Simulation {
     }
 
     async processPoints(points) {
-        await crsbinding.idleTaskManager.add(async () => {
-            let affectedCount = 0;
-            for (let i = 0; i < points.length; i++) {
-                const point = points[i];
+        let affectedCount = 0;
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
 
-                if (point == null) {
-                    continue;
-                }
-
-                const p = await this.processPoint(point);
-                points[i] = p;
-                affectedCount += 1;
+            if (point == null) {
+                continue;
             }
 
-            if (affectedCount == 0) {
-                this.done();
-            }
-            else {
-                await this.drawPoints(points);
-            }
-        });
-    }
+            const p = await this.processPoint(point);
+            points[i] = p;
+            affectedCount += 1;
+        }
 
-    async processPoint(point) {
-        const pValue = this.getValue(point.x, point.y);
-        const surround = this.setSurround(point.x, point.y);
-        const lowest = this.findLowestPoint(surround);
-
-        if (lowest.value < pValue) {
-            return { x: lowest.x, y: lowest.y };
+        if (affectedCount == 0) {
+            this.done();
+        }
+        else {
+            await this.drawPoints(points);
         }
     }
 
-    setSurround(x, y) {
+    async processPoint(point) {
+        const pValue = this.getValue(point.row, point.column);
+        const surround = this.setSurround(point.row, point.column);
+        const lowest = this.findLowestPoint(surround);
+
+        if (lowest.value < pValue) {
+            return { row: lowest.row, column: lowest.column };
+        }
+    }
+
+    setSurround(row, column) {
         const surround = [
-            { x: x, y: y + 1, value: this.getValue(x, y + 1) },
-            { x: x + 1, y: y + 1, value: this.getValue(x + 1, y + 1) },
-            { x: x + 1, y: y, value: this.getValue(x + 1, y) },
-            { x: x + 1, y: y - 1, value: this.getValue(x + 1, y - 1) },
-            { x: x, y: y - 1, value: this.getValue(x, y - 1) },
-            { x: x - 1, y: y - 1, value: this.getValue(x - 1, y - 1) },
-            { x: x - 1, y: y, value: this.getValue(x - 1, y) },
-            { x: x - 1, y: y + 1, value: this.getValue(x - 1, y + 1) }
+            // top
+            { row: row - 1, column: column, value: this.getValue(row - 1, column) },
+            // top right
+            { row: row - 1, column: column + 1, value: this.getValue(row - 1, column + 1) },
+            // right
+            { row: row, column: column + 1, value: this.getValue(row, column + 1) },
+            // bottom right
+            { row: row + 1, column: column + 1, value: this.getValue(row + 1, column + 1) },
+            // bottom
+            { row: row + 1, column: column, value: this.getValue(row + 1, column) },
+            // bottom left
+            { row: row + 1, column: column - 1, value: this.getValue(row + 1, column - 1) },
+            // left
+            { row: row, column: column - 1, value: this.getValue(row, column - 1) },
+            // top left
+            { row: row + 1, column: column - 1, value: this.getValue(row + 1, column - 1) }
         ]
 
         return surround;
@@ -159,13 +167,19 @@ class Simulation {
         return lowest;
     }
 
-    getValue(x, y) {
-        if (x < 0) return Number.MAX_VALUE;
-        if (y < 0) return Number.MAX_VALUE;
-        if (x > this.data.width) return Number.MAX_VALUE;
-        if (y > this.data.height) return Number.MAX_VALUE;
+    getValue(row, column) {
+        if (column < 0) return Number.MAX_VALUE;
+        if (row < 0) return Number.MAX_VALUE;
+        if (column > this.data.width) return Number.MAX_VALUE;
+        if (row > this.data.height) return Number.MAX_VALUE;
 
-        return this.data.points[x][y];
+        const dr = this.data.points[row];
+
+        if (dr == null) {
+            return Number.MAX_VALUE;
+        }
+
+        return dr[column];
     }
 
     async drawPoints(points) {
@@ -175,8 +189,8 @@ class Simulation {
 
         for (const point of points) {
             if (point != null) {
-                const rIndex = point.y * rowSize;
-                const cIndex = point.x * 4;
+                const rIndex = point.row * rowSize;
+                const cIndex = point.column * 4;
                 const i = rIndex + cIndex;
                 this.setDataAt(canvasData, i)
             }
