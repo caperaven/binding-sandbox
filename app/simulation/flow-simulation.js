@@ -53,9 +53,9 @@ export class FlowManager {
         this.flow.removeEventListener("mousemove", this._mouseMoveHandler);
         this.flow.removeEventListener("mouseup", this._mouseUpHandler);
 
-        const flowData = this.flow.getContext("2d").getImageData(0, 0, this.flow.width, this.flow.height);
+        const flowCtx = this.flow.getContext("2d");
 
-        const simulation = new Simulation(this.data, flowData, this.rect, () => {
+        const simulation = new Simulation(this.data, flowCtx, this.rect, () => {
             console.log("done");
             simulation.dispose();
         })
@@ -63,9 +63,9 @@ export class FlowManager {
 }
 
 class Simulation {
-    constructor(data, flowData, rect, callback) {
+    constructor(data, flowCtx, rect, callback) {
         this.data = data;
-        this.flowData = flowData;
+        this.flowCtx = flowCtx;
         this.rect = rect;
         this.callback = callback;
         const points = this.createPointData();
@@ -75,7 +75,7 @@ class Simulation {
 
     dispose() {
         this.data = null;
-        this.flowData = null;
+        this.flowCtx = null;
         this.rect = null;
         this.callback = null;
     }
@@ -89,9 +89,9 @@ class Simulation {
         const x = this.rect.x;
         const y = this.rect.y;
 
-        for (let rx = 0; rx < this.rect.width; rx++) {
-            for (let ry = 0; ry < this.rect.height; ry++) {
-                points.push({ x: x + rx, y: y + ry });
+        for (let row = 0; row < this.rect.height; row ++) {
+            for (let column = 0; column < this.rect.width; column ++) {
+                points.push( {x: x + column, y: y + row} )
             }
         }
 
@@ -117,7 +117,7 @@ class Simulation {
                 this.done();
             }
             else {
-                await this.processPoints(points);
+                await this.drawPoints(points);
             }
         });
     }
@@ -166,5 +166,34 @@ class Simulation {
         if (y > this.data.height) return Number.MAX_VALUE;
 
         return this.data.points[x][y];
+    }
+
+    async drawPoints(points) {
+        const canvasData = this.flowCtx.createImageData(this.data.width, this.data.height)
+
+        const rowSize = this.data.width * 4;
+
+        for (const point of points) {
+            if (point != null) {
+                const rIndex = point.y * rowSize;
+                const cIndex = point.x * 4;
+                const i = rIndex + cIndex;
+                this.setDataAt(canvasData, i)
+            }
+        }
+
+        this.flowCtx.putImageData(canvasData, 0, 0);
+
+        const timeout = setTimeout(async () => {
+            clearTimeout(timeout);
+            await this.processPoints(points);
+        }, 20)
+    }
+
+    setDataAt(canvasData, index) {
+        canvasData.data[index + 0] = 0;
+        canvasData.data[index + 1] = 128;
+        canvasData.data[index + 2] = 255;
+        canvasData.data[index + 3] = 255;
     }
 }
