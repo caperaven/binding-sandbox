@@ -40,7 +40,7 @@
         border-radius: 50%;
     }
 
-    .actor {
+    .actor, .visited, .blocked {
         position: relative;
     }
 
@@ -53,6 +53,24 @@
         bottom:0.25rem;
         background: #e91e63;
     }
+
+    .visited::after, .blocked::after {
+        content: "";
+        position: absolute;
+        left:0.5rem;
+        top:0.5rem;
+        right:0.5rem;
+        bottom:0.5rem;
+    }
+
+    .visited::after {
+        background: #40bd00;
+    }
+
+    .blocked::after {
+        background: #db0000;
+    }
+
 </style>
 
 <h2>${title}</h2>

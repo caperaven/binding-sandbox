@@ -167,6 +167,8 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
     }
 
     async solve() {
+        this.steps = [];
+
         this.currentPos = this.getProperty("start");
         const endPos = this.getProperty("end");
 
@@ -179,7 +181,7 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
             else {
                 this.step();
             }
-        }, 500);
+        }, 100);
     }
 
     step() {
@@ -190,6 +192,25 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
         if (this.isOpen(this.currentPos.row - 1, this.currentPos.col)) {
             this.goto(this.currentPos.row - 1, this.currentPos.col)
         }
+
+        // look right
+        else if (this.isOpen(this.currentPos.row, this.currentPos.col + 1)) {
+            this.goto(this.currentPos.row, this.currentPos.col + 1)
+        }
+
+        // look down
+        else if (this.isOpen(this.currentPos.row + 1, this.currentPos.col)) {
+            this.goto(this.currentPos.row + 1, this.currentPos.col)
+        }
+
+        // look left
+        else if (this.isOpen(this.currentPos.row, this.currentPos.col - 1)) {
+            this.goto(this.currentPos.row, this.currentPos.col - 1)
+        }
+
+        else {
+            console.log("back track");
+        }
     }
 
     isOpen(row, col) {
@@ -199,9 +220,16 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
     }
 
     goto(row, col) {
+        this.steps.push(Object.assign({}, this.currentPos));
+        this.data[this.currentPos.row][this.currentPos.col] = 2;
         this.elementAt(this.currentPos.row, this.currentPos.col).classList.remove("actor");
+        this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("visited")
         this.currentPos.row = row;
         this.currentPos.col = col;
         this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("actor");
+    }
+
+    backTrack() {
+        this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("blocked")
     }
 }
