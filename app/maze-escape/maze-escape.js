@@ -209,7 +209,7 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
         }
 
         else {
-            console.log("back track");
+            this.backTrack();
         }
     }
 
@@ -229,7 +229,22 @@ export default class MazeEscape extends crsbinding.classes.ViewBase {
         this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("actor");
     }
 
+    actorTo(row, col) {
+        this.elementAt(this.currentPos.row, this.currentPos.col).classList.remove("actor");
+        this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("actor");
+    }
+
     backTrack() {
-        this.elementAt(this.currentPos.row, this.currentPos.col).classList.add("blocked")
+        this.data[this.currentPos.row][this.currentPos.col] = -1;
+        let element = this.elementAt(this.currentPos.row, this.currentPos.col);
+        element.classList.add("blocked");
+        element.classList.remove("actor");
+
+        const pos = this.steps.pop();
+        this.currentPos = pos;
+
+        element = this.elementAt(this.currentPos.row, this.currentPos.col);
+        element.classList.remove("visited");
+        element.classList.add("actor");
     }
 }
