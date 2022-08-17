@@ -69,10 +69,6 @@
         import IndexViewModel from "./index.js";
 
         async function load() {
-            await crs.modules.enableBinding([
-                ["my-component", "/components/component.js"]
-            ])
-
             document.viewModel = new IndexViewModel(document.body);
 
             window.addEventListener("load", (event) => {

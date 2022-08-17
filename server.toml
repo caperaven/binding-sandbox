@@ -1,0 +1,6 @@
+host = "127.0.0.1"
+port = 8000
+
+verbose = true
+root_dir = "./"
+graceful_shutdown = false

@@ -1,0 +1,1 @@
+1. Given a string "15x20", with a single line of code, convert this string into an array [15, 20] where the values 15 and 20 are of type number not string.

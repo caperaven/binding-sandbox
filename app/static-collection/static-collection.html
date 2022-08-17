@@ -1,0 +1,14 @@
+<h2>${title}</h2>
+
+<ul>
+    <template for="item of data">
+        <li style.color.if="item.age < 50 ? 'blue' : 'red'">
+            <span>${item.firstName} ${item.lastName}</span>
+            <span>${item.age}</span>
+        </li>
+    </template>
+</ul>
+
+<button click.call="update">Update</button>
+<button click.call="add">Add</button>
+<button click.call="remove">Remove</button>

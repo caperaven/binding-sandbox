@@ -107,35 +107,37 @@ async function bundleCss(file, output, minified) {
 
 await createFolderStructure();
 
+const minified = false;
+
 // routes
-await packageMarkup("./app/routes.json", "./dist/app/routes.json", true);
+await packageMarkup("./app/routes.json", "./dist/app/routes.json", minified);
 
 // html files
-await packageHTML("./app/404/404.html", "./dist/app/404/404.html", true);
-await packageHTML("./app/about/about.html", "./dist/app/about/about.html", true);
-await packageHTML("./app/form/form.html", "./dist/app/form/form.html", true);
-await packageHTML("./app/welcome/simulation.html", "./dist/app/welcome/simulation.html", true);
+await packageHTML("./app/404/404.html", "./dist/app/404/404.html", minified);
+await packageHTML("./app/about/about.html", "./dist/app/about/about.html", minified);
+await packageHTML("./app/form/form.html", "./dist/app/form/form.html", minified);
+await packageHTML("./app/welcome/simulation.html", "./dist/app/welcome/simulation.html", minified);
 
 // css files
-await bundleCss("./styles/styles.css", "./dist/styles/styles.css", true);
-await packageMarkup("./styles/views/404.css", "./dist/styles/views/404.css", true);
-await packageMarkup("./styles/views/about.css", "./dist/styles/views/about.css", true);
-await packageMarkup("./styles/views/welcome.css", "./dist/styles/views/welcome.css", true);
+await bundleCss("./styles/styles.css", "./dist/styles/styles.css", minified);
+await packageMarkup("./styles/views/404.css", "./dist/styles/views/404.css", minified);
+await packageMarkup("./styles/views/about.css", "./dist/styles/views/about.css", minified);
+await packageMarkup("./styles/views/welcome.css", "./dist/styles/views/welcome.css", minified);
 
 // js files
-await bundleJs("./index.js", "./dist/index.js", true);
-await packageFile("./app/form/form.js", "./dist/app/form/form.js", "js", "esm", true);
-await packageFile("./app/welcome/simulation.js", "./dist/app/welcome/simulation.js", "js", "esm", true);
+await bundleJs("./index.js", "./dist/index.js", minified);
+await packageFile("./app/form/form.js", "./dist/app/form/form.js", "js", "esm", minified);
+await packageFile("./app/welcome/simulation.js", "./dist/app/welcome/simulation.js", "js", "esm", minified);
 
 // copy files
-await packageHTML("./index.html", "./dist/index.html", true);
+await packageHTML("./index.html", "./dist/index.html", minified);
 await Deno.copyFile("./favicon.ico", "./dist/favicon.ico");
 await copy("./packages", "./dist/packages");
 
 // components
-await packageFile("./components/component.js", "./dist/components/component.js", "js", "esm", true);
+await packageFile("./components/component.js", "./dist/components/component.js", "js", "esm", minified);
 
 // src
-await packageFile("./src/my-class.js", "./dist/src/my-class.js", "js", "esm", true);
+await packageFile("./src/my-class.js", "./dist/src/my-class.js", "js", "esm", minified);
 
 Deno.exit(0);

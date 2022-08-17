@@ -1,0 +1,74 @@
+<style>
+    .toolbar {
+        background: #e5e5e5;
+        border-bottom: solid gray 1px;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 0.5rem;
+    }
+
+    .maze {
+        display: grid;
+    }
+
+    .maze div:hover {
+        border: #0094d1 solid 2px;
+    }
+
+    .wall {
+        background: black;
+    }
+
+    .gap {
+        background: white;
+        border: #e8e8e8 dotted 1px;
+    }
+
+    select {
+        padding: 0.25rem;
+    }
+
+    .start {
+        background: #40bd00;
+        border-radius: 50%;
+    }
+
+    .end {
+        background: #00adff;
+        border-radius: 50%;
+    }
+
+    .actor {
+        position: relative;
+    }
+
+    .actor::after {
+        content: "";
+        position: absolute;
+        left:0.25rem;
+        top:0.25rem;
+        right:0.25rem;
+        bottom:0.25rem;
+        background: #e91e63;
+    }
+</style>
+
+<h2>${title}</h2>
+
+<div class="toolbar">
+    <span>maze size:</span>
+    <select value.bind="dimensions">
+        <option value="10x10">10x10</option>
+        <option value="15x15">15x15</option>
+        <option value="20x20">20x20</option>
+    </select>
+    <button click.call="saveToStorage">Save</button>
+    <button click.call="clear">Clear</button>
+    <button click.call="solve" disabled.if="start == null || end == null">Solve</button>
+</div>
+
+<div class="maze">
+
+</div>

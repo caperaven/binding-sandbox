@@ -1,0 +1,17 @@
+<style>
+    .canvas {
+        border: silver 1px solid;
+        width: 500px;
+        height: 500px;
+    }
+</style>
+
+<h2>${title}</h2>
+
+<div class="canvas"
+     mousemove.call="mousemove($event, 10)"
+     click.call="click">
+</div>
+
+<div>Move: x = ${mouseX} y = ${mouseY}</div>
+<div>Move: x = ${clickX} y = ${clickY}</div>

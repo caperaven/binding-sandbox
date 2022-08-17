@@ -11,14 +11,34 @@
       "hasStyle": true
     },
     {
+      "title": "Maze Escape",
+      "hash": "#maze-escape",
+      "view": "maze-escape"
+    },
+    {
+      "title": "Static Collection",
+      "hash": "#static-collection",
+      "view": "static-collection"
+    },
+    {
       "title": "Simulation",
       "hash": "#simulation",
       "view": "simulation"
     },
     {
+      "title": "Events",
+      "hash": "#events",
+      "view": "events"
+    },
+    {
       "title": "Form",
       "hash": "#form",
       "view": "form"
+    },
+    {
+      "title": "Clock",
+      "hash": "#clock",
+      "view": "clock"
     },
     {
       "title": "About",
